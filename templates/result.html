@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Result - Insurance Charge Predictor</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .prediction-card {
+            background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 25px rgba(76, 175, 80, 0.3);
+        }
+        
+        .prediction-amount {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .prediction-label {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .model-info {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .model-info h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .input-summary {
+            background: #e3f2fd;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .input-summary h3 {
+            color: #1976d2;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .input-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .input-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #2196f3;
+        }
+        
+        .input-item strong {
+            display: block;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .input-item span {
+            color: #666;
+            font-size: 1.1rem;
+        }
+        
+        .actions {
+            text-align: center;
+            gap: 15px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: transform 0.2s ease;
+            min-width: 150px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .interpretation {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .interpretation h4 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+        
+        .interpretation p {
+            color: #856404;
+            line-height: 1.6;
+        }
+        
+        @media (max-width: 768px) {
+            .prediction-amount {
+                font-size: 2.5rem;
+            }
+            
+            .input-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .actions {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>✅ Prediction Complete!</h1>
+            <p>Your insurance charge prediction is ready</p>
+        </div>
+        
+        <div class="content">
+            <div class="prediction-card">
+                <div class="prediction-amount">${{ prediction }}</div>
+                <div class="prediction-label">Estimated Annual Insurance Charges</div>
+            </div>
+            
+            <div class="model-info">
+                <h3>🤖 Model Used: {{ model_name }}</h3>
+                <p>This prediction was generated using the {{ model_name }} algorithm</p>
+            </div>
+            
+            <div class="interpretation">
+                <h4>💡 Understanding Your Prediction</h4>
+                <p>
+                    {% if prediction < 5000 %}
+                    Your predicted insurance charges are relatively low. This typically indicates lower risk factors such as younger age, healthy BMI, non-smoking status, and fewer dependents.
+                    {% elif prediction < 15000 %}
+                    Your predicted insurance charges are moderate. This suggests a balanced risk profile with some factors that may increase costs.
+                    {% elif prediction < 30000 %}
+                    Your predicted insurance charges are above average. This may be due to factors like smoking, higher BMI, older age, or multiple dependents.
+                    {% else %}
+                    Your predicted insurance charges are quite high. This typically indicates higher risk factors such as smoking, advanced age, or other health-related considerations.
+                    {% endif %}
+                </p>
+            </div>
+            
+            <div class="input-summary">
+                <h3>📋 Your Input Summary</h3>
+                <div class="input-grid">
+                    <div class="input-item">
+                        <strong>Age</strong>
+                        <span>{{ input_data.age }} years</span>
+                    </div>
+                    <div class="input-item">
+                        <strong>Gender</strong>
+                        <span>{{ input_data.sex.title() }}</span>
+                    </div>
+                    <div class="input-item">
+                        <strong>BMI</strong>
+                        <span>{{ input_data.bmi }}</span>
+                    </div>
+                    <div class="input-item">
+                        <strong>Children</strong>
+                        <span>{{ input_data.children }}</span>
+                    </div>
+                    <div class="input-item">
+                        <strong>Smoking Status</strong>
+                        <span>{{ 'Smoker' if input_data.smoker == 'yes' else 'Non-Smoker' }}</span>
+                    </div>
+                    <div class="input-item">
+                        <strong>Region</strong>
+                        <span>{{ input_data.region.title() }}</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="actions">
+                <a href="/" class="btn btn-primary">🔄 Make Another Prediction</a>
+                <button onclick="window.print()" class="btn btn-secondary">🖨️ Print Results</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    // Add some animation when the page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        const predictionCard = document.querySelector('.prediction-card');
+        const amount = document.querySelector('.prediction-amount');
+        
+        // Animate the prediction amount
+        const finalAmount = parseFloat("{{ prediction }}".replace(/[^0-9.]/g, ''));
+        let currentAmount = 0;
+        const increment = finalAmount / 50;
+        
+        const animation = setInterval(() => {
+            currentAmount += increment;
+            if (currentAmount >= finalAmount) {
+                currentAmount = finalAmount;
+                clearInterval(animation);
+            }
+            amount.textContent = '$' + Math.round(currentAmount).toLocaleString();
+        }, 30);
+    });
+</script>
+</body>
+</html>
